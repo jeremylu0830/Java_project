@@ -5,34 +5,30 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 public class Game extends JFrame {
+    private JFrame gameFrame;
+    private GameWindow gameWindow;
+
     public Game() {
-        setTitle("Game Start");
         setSize(300, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(3, 1));
 
-        JButton playButton = new JButton("Play");
+        // 創建 Play 按鈕
+        JButton playButton = new JButton("開始遊戲");
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Game.this, "Starting the game...");
-                // 開始執行遊戲
+                gameWindow = new GameWindow();
+                gameWindow.setVisible(true);
+                setVisible(false);
             }
         });
         add(playButton);
 
-        JButton menuButton = new JButton("Menu");
-        menuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showMenu();
-            }
-        });
-        add(menuButton);
-
-        JButton historyButton = new JButton("History");
+        JButton historyButton = new JButton("歷史紀錄");
         historyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,11 +37,11 @@ public class Game extends JFrame {
         });
         add(historyButton);
 
-        JButton quitButton = new JButton("Quit");
+        JButton quitButton = new JButton("退出");
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(Game.this, "Are you sure you want to quit?", "Quit Game", JOptionPane.YES_NO_OPTION);
+                int choice = JOptionPane.showConfirmDialog(Game.this, "確定要退出嗎？", "退出遊戲", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
@@ -56,11 +52,7 @@ public class Game extends JFrame {
         setVisible(true);
     }
 
-    public void showMenu() {
-        JOptionPane.showMessageDialog(this, "Game Menu:\n1. Settings\n2. Instructions");
-        // 增加選項
-    }
-
+    // 顯示遊戲歷史記錄
     public void showHistory() {
         StringBuilder history = new StringBuilder();
         try {
@@ -71,9 +63,9 @@ public class Game extends JFrame {
             }
             reader.close();
         } catch (IOException ex) {
-            history.append("Error reading history: ").append(ex.getMessage());
+            history.append("讀取歷史記錄時出錯: ").append(ex.getMessage());
         }
-        JOptionPane.showMessageDialog(this, "Game History:\n" + history.toString());
+        JOptionPane.showMessageDialog(this, "遊戲歷史記錄:\n" + history.toString());
     }
 
     public static void main(String[] args) {
@@ -83,5 +75,51 @@ public class Game extends JFrame {
                 new Game();
             }
         });
+    }
+}
+
+
+class GameWindow extends JFrame {
+    public GameWindow() {
+        setTitle("遊戲窗口");
+        setSize(770, 512); // 設置視窗大小
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // 點擊關閉按鈕時只關閉該視窗
+        setLocationRelativeTo(null); // 將視窗置中
+
+        JLabel backgroundLabel = new JLabel();
+        add(backgroundLabel);
+
+        ImageIcon backgroundImage = new ImageIcon("background.png");
+        backgroundLabel.setIcon(backgroundImage);
+
+        JButton menuButton = new JButton("暫停");
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showMenu();
+            }
+        });
+        add(menuButton, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private void showMenu() {
+        Object[] options = {"繼續遊戲", "退出"};
+        int choice = JOptionPane.showOptionDialog(this,
+                "選擇操作",
+                "遊戲暫停",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (choice == 0) {
+            // 繼續遊戲
+            setVisible(true);
+        } else if (choice == 1) {
+            // 退出
+            System.exit(0);
+        }
     }
 }
