@@ -12,7 +12,7 @@ public class Game extends JFrame {
     private GameWindow gameWindow;
 
     public Game() {
-        setSize(300, 250);
+        setSize(1200, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(3, 1));
 
@@ -82,16 +82,18 @@ public class Game extends JFrame {
 class GameWindow extends JFrame {
     public GameWindow() {
         setTitle("遊戲窗口");
-        setSize(770, 512); // 設置視窗大小
+        setSize(1200, 800); // 設置視窗大小
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); // 點擊關閉按鈕時只關閉該視窗
         setLocationRelativeTo(null); // 將視窗置中
 
         JLabel backgroundLabel = new JLabel();
-        add(backgroundLabel);
+        
 
         ImageIcon backgroundImage = new ImageIcon("background.png");
+        backgroundImage.getImage().getScaledInstance(1200, 800,Image.SCALE_DEFAULT);
         backgroundLabel.setIcon(backgroundImage);
-
+        add(backgroundLabel);
+        
         JButton menuButton = new JButton("暫停");
         menuButton.addActionListener(new ActionListener() {
             @Override
@@ -100,7 +102,7 @@ class GameWindow extends JFrame {
             }
         });
         add(menuButton, BorderLayout.SOUTH);
-
+        this.pack();
         setVisible(true);
     }
 
