@@ -65,7 +65,7 @@ public class MyPanel extends JPanel implements ActionListener,MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e){
-        mousePressedTime = System.currentTimeMillis(); 
+        mousePressedTime=System.currentTimeMillis(); 
     }
 
     @Override
